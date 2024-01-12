@@ -6,23 +6,21 @@
 #         self.right = right
 class Solution:
     
-    def distance(self, ancestors, value):
-        if len(ancestors) < 1:
-            return 0
-        return max([abs(ancestors[i] - value) for i in range(len(ancestors))])
-    
-    def recurse(self, ancestor_values, node):    
+    def recurse(self, node):
         if node == None:
-            return 0
+            return 0, float('inf'), float('-inf')
         
         if node.left == None and node.right == None:
-            return self.distance(ancestor_values, node.val)
+            return 0, node.val, node.val
         
-        new_ancestor_values = ancestor_values + [node.val]
-        left_distances = self.recurse(new_ancestor_values, node.left)
-        right_distances = self.recurse(new_ancestor_values, node.right)
-        current_distance = self.distance(ancestor_values, node.val)
-        return max(left_distances,right_distances,current_distance )
+        max_diff_l, left_min, left_max = self.recurse(node.left)
+        max_diff_r, right_min, right_max = self.recurse(node.right)
         
+        minimum = min(left_min, right_min, node.val)
+        maximum =  max(left_max, right_max, node.val)
+    
+        max_diff = max(max_diff_l, max_diff_r, abs(node.val-minimum),abs(maximum-node.val))
+        return max_diff, minimum, maximum
+    
     def maxAncestorDiff(self, root: Optional[TreeNode]) -> int:
-        return self.recurse([], root)
+        return self.recurse(root)[0]
