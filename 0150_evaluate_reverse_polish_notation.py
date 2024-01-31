@@ -6,7 +6,7 @@ class Solution:
         operations ={"+": lambda a,b: a+b,
                      "-": lambda a,b: a-b,
                      "*": lambda a,b: a*b,
-                     "/": lambda a,b: math.floor(a/b) if a/b > 0 else math.ceil(a/b)}
+                     "/": lambda a,b: int(a/b)}
         
         for token in tokens:
             #when an operator is added
